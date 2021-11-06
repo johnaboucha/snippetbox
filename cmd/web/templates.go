@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"johnboucha.com/snippetbox/pkg/forms"
 	"johnboucha.com/snippetbox/pkg/models"
 )
 
@@ -12,6 +13,7 @@ type templateData struct {
 	CurrentYear int
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
+	Form        *forms.Form
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {
