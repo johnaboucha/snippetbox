@@ -5,6 +5,8 @@ import (
 
 	"github.com/bmizerany/pat"
 	"github.com/justinas/alice"
+
+	"johnboucha.com/snippetbox/ui"
 )
 
 func (app *application) routes() http.Handler {
@@ -13,6 +15,7 @@ func (app *application) routes() http.Handler {
 
 	mux := pat.New()
 	mux.Get("/", dynamicMiddleware.ThenFunc(app.home))
+	mux.Get("/about", dynamicMiddleware.ThenFunc(app.about))
 	mux.Get("/snippet/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createSnippetForm))
 	mux.Post("/snippet/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createSnippet))
 	mux.Get("/snippet/:id", dynamicMiddleware.ThenFunc(app.showSnippet))
@@ -25,8 +28,8 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/ping", http.HandlerFunc(ping))
 
-	fileServer := http.FileServer(http.Dir("./ui/static/"))
-	mux.Get("/static/", http.StripPrefix("/static", fileServer))
+	fileServer := http.FileServer(http.FS(ui.Files))
+	mux.Get("/static/", fileServer)
 
 	return standardMiddleware.Then(mux)
 }
