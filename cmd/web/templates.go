@@ -19,6 +19,7 @@ type templateData struct {
 	Snippets        []*models.Snippet
 	Form            *forms.Form
 	IsAuthenticated bool
+	User            *models.User
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {
